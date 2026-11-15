@@ -8,7 +8,7 @@ Photographs move automatically in an endless ribbon. Hover gently magnifies a ph
 
 ## Playground features
 
-- Thirteen sample files, including an animated GIF; captions preserve the exact original filenames and extensions.
+- Sixteen sample files, including two looping muted videos and an animated GIF; captions preserve the exact original filenames and extensions.
 - Continuous autoplay, with optional dragging and wheel/trackpad browsing.
 - Square image expansion regardless of the source image proportions, with a 14 px caption placed 10 px below the image.
 - Sliders, segmented switches and collapsible Layout, Focus And Depth, and Motion sections.
@@ -54,7 +54,7 @@ export function Gallery() {
 
 Give the parent a height. Allow at least `2 × size × max(2.05, hoverScale) / aspectRatio − size / aspectRatio + 48` pixels so enlarged images fit above the shared bottom baseline. The demo adjusts its height automatically.
 
-`images` accepts `{ src, alt, caption? }` objects. Replace them with your own files. `settings` is a partial `GalleryCarouselSettings` object. Image buttons expand inline within the carousel. The selected image always uses a square crop, regardless of its source aspect ratio, and moves to a 28 px left inset (16 px on narrow screens). The gallery pauses until the image is collapsed. The expanded height is 2.05 times the base height, constrained to fit the available width.
+`images` accepts `{ src, alt, caption?, type? }` objects. Set `type: 'video'` for a video; videos autoplay muted, loop and play inline, with the same hover and square expansion behavior as images. The default type is an image. Replace them with your own files. `settings` is a partial `GalleryCarouselSettings` object. Image buttons expand inline within the carousel. The selected image always uses a square crop, regardless of its source aspect ratio, and moves to a 28 px left inset (16 px on narrow screens). The gallery pauses until the image is collapsed. The expanded height is 2.05 times the base height, constrained to fit the available width.
 
 ## Settings
 
@@ -85,7 +85,7 @@ Give the parent a height. Allow at least `2 × size × max(2.05, hoverScale) / a
 | `wheel` | `true` | Enable wheel/trackpad browsing |
 | `captions` | `true` | Show the focused image caption |
 
-The demo additionally controls the sample image count (4–13), theme and Settings visibility. Alignment is fixed to the shared bottom baseline. Pointer Tilt, Hover Lift and the Interaction section are not exposed in the playground; the reusable component still accepts `tilt`, `lift`, `draggable` and `wheel` through its API. Drag and wheel browsing remain enabled by default. Reset restores settings, theme, sample count and gallery position.
+The demo additionally controls the sample image count (4–16), theme and Settings visibility. Alignment is fixed to the shared bottom baseline. Pointer Tilt, Hover Lift and the Interaction section are not exposed in the playground; the reusable component still accepts `tilt`, `lift`, `draggable` and `wheel` through its API. Drag and wheel browsing remain enabled by default. Reset restores settings, theme, sample count and gallery position.
 
 ## Keyboard and motion
 

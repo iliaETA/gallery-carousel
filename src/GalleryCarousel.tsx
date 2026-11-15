@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import './gallery-carousel.css';
 
-export type GalleryImage = { src: string; alt: string; caption?: string };
+export type GalleryImage = { src: string; alt: string; caption?: string; type?: 'image' | 'video' };
 export type GalleryCarouselSettings = {
   size: number; aspectRatio: number; gap: number; radius: number;
   hoverScale: number; neighborScale: number;
@@ -314,7 +314,9 @@ export function GalleryCarousel({ images, settings, className = '' }: GalleryCar
     style={{ '--gc-radius': `${s.radius}px`, '--gc-edge': `${s.edgeFade}px` } as CSSProperties}>
     {count ? Array.from({ length: copies }, (_, copy) => images.map((image, index) =>
       <button type="button" className="gc-item" key={`${copy}-${index}`} data-index={index} tabIndex={-1} aria-label={`Expand ${image.caption || image.alt}`}>
-        <img className="gc-photo" src={image.src} alt={image.alt} draggable={false} decoding="async" />
+        {image.type === 'video'
+          ? <video className="gc-photo" src={image.src} aria-label={image.alt} autoPlay muted loop playsInline preload="auto" disablePictureInPicture />
+          : <img className="gc-photo" src={image.src} alt={image.alt} draggable={false} decoding="async" />}
         {s.captions && <span className="gc-caption" aria-hidden="true">{image.caption || image.alt}</span>}
       </button>)) : <p className="gc-empty">Add images to start your gallery.</p>}
   </div>;

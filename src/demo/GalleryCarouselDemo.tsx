@@ -6,22 +6,74 @@ import './gallery-demo.css';
 
 const repository = 'https://github.com/iliaETA/gallery-carousel';
 const photos = [
-  "Collage Shirt by Graphic Content (Side A).png",
-  "MM6 x Salomon.png",
-  "Sport Movement (1).jpeg",
-  "asics-type-shit.jpeg",
-  "blurrr.webp",
-  "capp.jpg",
-  "hoodie.jpeg",
-  "jerseyyy.png",
-  "on.jpg",
-  "puppy (˶>⩊<˶) .jpg",
-  "video presentation of Maserati.gif",
-  "who is this guy?.jpg",
-  "yes.jpeg"
+  [
+    "Collage Shirt by Graphic Content (Side A).png",
+    "e3d780260aa3.png"
+  ],
+  [
+    "MM6 x Salomon.png",
+    "378a350897c5.png"
+  ],
+  [
+    "Siri AI.mp4",
+    "5f2c8292cfd7.mp4"
+  ],
+  [
+    "Sport Movement (1).jpeg",
+    "780ba3c4df2d.jpeg"
+  ],
+  [
+    "asics-type-shit.jpeg",
+    "e0487760d31f.jpeg"
+  ],
+  [
+    "attach picker.mp4",
+    "55a6f929b086.mp4"
+  ],
+  [
+    "blurrr.webp",
+    "d251bdd65a7f.webp"
+  ],
+  [
+    "capp.jpg",
+    "990ac5c77158.jpg"
+  ],
+  [
+    "h00k.jpg",
+    "1eecdaede428.jpg"
+  ],
+  [
+    "jerseyyy.png",
+    "8f8cb0710daf.png"
+  ],
+  [
+    "on.jpg",
+    "18610dfb0d1c.jpg"
+  ],
+  [
+    "outfit.jpeg",
+    "794ace3a5d48.jpeg"
+  ],
+  [
+    "puppy (˶>⩊<˶) .jpg",
+    "91f1541ddb65.jpg"
+  ],
+  [
+    "video presentation of Maserati.gif",
+    "19d641ffdbfc.gif"
+  ],
+  [
+    "who is this guy?.jpg",
+    "ff166cdbcc0c.jpg"
+  ],
+  [
+    "yes.jpeg",
+    "c49b5809044e.jpeg"
+  ]
 ] as const;
-export const demoGalleryImages: GalleryImage[] = photos.map((filename, index) => ({
-  src: `/assets/gallery-carousel/${String(index + 1).padStart(2, '0')}.${filename.split('.').pop()}`, alt: filename, caption: filename,
+export const demoGalleryImages: GalleryImage[] = photos.map(([filename, asset]) => ({
+  src: `/assets/gallery-carousel/${asset}`, alt: filename, caption: filename,
+  type: /\.(mp4|mov|webm)$/i.test(filename) ? 'video' : 'image',
 }));
 
 const d = defaultGallerySettings;
