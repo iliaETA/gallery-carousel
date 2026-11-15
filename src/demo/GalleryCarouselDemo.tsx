@@ -119,9 +119,11 @@ export function GalleryCarouselDemo() {
     </main>
     <button className="gd-shade" tabIndex={-1} aria-hidden="true" onClick={closeSettings} />
     <aside id="gallery-settings" className="gd-settings" aria-label="Gallery settings" inert={!settingsOpen}>
+      <div className="gd-settings-header"><h2>Settings</h2>
       <button className="gd-settings-close" aria-label="Close settings" onClick={closeSettings}>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg>
       </button>
+      </div>
       <div className="gd-settings-scroll">
         <DialRoot mode="inline" theme={dark ? 'dark' : 'light'} productionEnabled versions="menu" />
       </div>

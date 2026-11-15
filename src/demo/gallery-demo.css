@@ -15,14 +15,17 @@ html[data-page="gallery-carousel"] body { min-width:0; }
 .gd-settings { position:fixed; top:84px; right:16px; max-height:calc(100svh - 100px); width:280px; z-index:6; display:flex; flex-direction:column; overflow:hidden; border:1px solid rgba(0,0,0,.1); border-radius:14px; background:rgba(250,250,250,.68); backdrop-filter:blur(32px) saturate(1.2); -webkit-backdrop-filter:blur(32px) saturate(1.2); box-shadow:0 4px 20px rgba(0,0,0,.08); transform:translateX(calc(100% + 20px)); opacity:0; visibility:hidden; transition:transform 380ms cubic-bezier(.22,1,.36,1),opacity 180ms ease,visibility 0s 380ms; }
 .gallery-demo[data-settings] .gd-settings { transform:translateX(0); opacity:1; visibility:visible; transition-delay:0s; }
 .gd-dark .gd-settings { background:rgba(33,33,33,.68); border-color:rgba(255,255,255,.1); box-shadow:0 8px 32px rgba(0,0,0,.5); }
-/* Let the host glass blur the carousel through the native DialKit surfaces. */
+/* Keep the control surfaces transparent over the glass panel. */
 .gd-settings .dialkit-root[data-theme] { --dial-glass-bg:transparent; }
 .gd-settings .dialkit-panel-inner { backdrop-filter:none; -webkit-backdrop-filter:none; }
 .gd-settings .dialkit-panel-toolbar { display:none; }
 .gd-settings .dialkit-folder-root > .dialkit-folder-content > .dialkit-folder-inner > .dialkit-folder:first-child { border-top:0; margin-top:0; }
-.gd-settings-scroll { min-height:0; max-height:inherit; overflow-y:auto; overscroll-behavior:contain; scrollbar-width:none; }
+.gd-settings-header { position:relative; flex-shrink:0; display:flex; align-items:center; height:48px; margin:0 12px; border-bottom:1px solid var(--gd-border); }
+.gd-settings-header h2 { margin:0; font:600 15px/22px 'Helvetica Neue',Helvetica,Arial,sans-serif; letter-spacing:-.015em; }
+.gd-settings .dialkit-folder-root > .dialkit-panel-header { display:none; }
+.gd-settings-scroll { min-height:0; padding-top:12px; overflow-y:auto; overscroll-behavior:contain; scrollbar-width:none; }
 .gd-settings-scroll::-webkit-scrollbar { display:none; }
-.gd-settings-close { position:absolute; top:10px; right:8px; z-index:6; display:grid; place-items:center; width:28px; height:28px; padding:0; border:0; background:transparent; color:var(--gd-text); cursor:pointer; }
+.gd-settings-close { position:absolute; top:10px; right:-4px; z-index:6; display:grid; place-items:center; width:28px; height:28px; padding:0; border:0; background:transparent; color:var(--gd-text); cursor:pointer; }
 .gd-shade { display:none; }
 @media(max-width:899px) { .gallery-demo[data-settings] .gd-shade { display:block; position:fixed; inset:0; z-index:5; padding:0; border:0; background:#0002; backdrop-filter:blur(2px); } .gd-settings { top:16px; width:min(280px,calc(100vw - 32px)); max-height:calc(100svh - 32px); } }
 @media(max-width:600px) {

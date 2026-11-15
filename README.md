@@ -10,9 +10,9 @@ Photographs move automatically in an endless ribbon. Hover gently magnifies a ph
 
 - Continuous autoplay, with optional dragging and wheel/trackpad browsing.
 - Square image expansion regardless of the source image proportions, with a 14 px caption placed 10 px below the image.
-- Original [DialKit](https://github.com/joshpuckett/dialkit) sliders, segmented switches and collapsible Layout, Focus And Depth, and Motion sections.
+- Sliders, segmented switches and collapsible Layout, Focus And Depth, and Motion sections.
 - A right settings panel that overlays the gallery without resizing it, with a 32 px backdrop blur and a translucent surface in both themes.
-- A clean Settings header followed by one divider and Layout; the version picker and parameter-copy button are hidden.
+- A fixed Settings header and close button above the scrollable controls, followed by one divider and Layout; the version picker and parameter-copy button are hidden.
 - Text-only gray Back, GitHub, Dark theme / Light theme, Settings and Reset buttons, with Helvetica Neue Medium, 12 px corners and a subtle press scale effect.
 - Back links to the [UI Components collection](https://ilyfedorov.com/ui-components/). Reset restores all playground defaults.
 - Responsive layout, keyboard controls and reduced-motion support.
@@ -30,7 +30,7 @@ For production: `npm run build`, then `npm run preview`.
 
 ## Use the component
 
-Copy `src/GalleryCarousel.tsx` and `src/gallery-carousel.css` into a React project. The carousel itself only needs React. Its styles are imported by the component. The playground separately uses the original DialKit React panel and Motion, installed by `npm ci`.
+Copy `src/GalleryCarousel.tsx` and `src/gallery-carousel.css` into a React project. The carousel itself only needs React. Its styles are imported by the component. Install the playground dependencies with `npm ci`.
 
 ```tsx
 import { GalleryCarousel } from './GalleryCarousel';
@@ -94,11 +94,3 @@ The demo additionally controls the sample image count (4–12), theme and Settin
 - Native pinch zoom and vertical touch scrolling are preserved.
 - `prefers-reduced-motion` disables autoplay and spring magnification.
 - Animation work pauses when the gallery is outside the viewport or the document is hidden.
-
-## Credits
-
-An independently written interaction study inspired by [Nick Pyl's gallery](https://nickpyl.space/). Playground controls were inspired by [Misha Naer's Matrix demo](https://mishanaer.com/ui/matrix). No code or media from those sites is included.
-
-Code: [MIT](LICENSE). Temporary photographs are from [Unsplash](https://unsplash.com/) and retain their [Unsplash license](https://unsplash.com/license); see [sources](public/assets/gallery-carousel/sources.json). They are placeholders and are not part of the component API.
-
-The playground uses [DialKit 2.2.1](https://github.com/joshpuckett/dialkit) by Josh Puckett under its [MIT license](https://github.com/joshpuckett/dialkit/blob/main/LICENSE). The panel is mounted with `DialRoot` and wired with `useDialKitController`; the native controls are reused, with scoped host styles for the glass surface and simplified header.
