@@ -83,7 +83,7 @@ export function GalleryCarouselDemo() {
       </nav>
     </header>
     <main className="gd-main" aria-label="Gallery carousel">
-      <div className="gd-gallery-stage" style={{ minHeight: `${Math.max(380, (settings.alignment === 'center' ? settings.size * settings.hoverScale : settings.size * (2 * settings.hoverScale - 1)) / settings.aspectRatio + 48)}px` }}>
+      <div className="gd-gallery-stage" style={{ minHeight: `${Math.max(380, (settings.alignment === 'center' ? settings.size * Math.max(2.05, settings.hoverScale) : settings.size * (2 * Math.max(2.05, settings.hoverScale) - 1)) / settings.aspectRatio + 48)}px` }}>
         <GalleryCarousel key={revision} images={demoGalleryImages.slice(0, imageCount)} settings={settings} />
       </div>
     </main>

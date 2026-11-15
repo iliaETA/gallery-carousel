@@ -4,7 +4,7 @@ An infinite React image gallery by [Ilya Fedorov](https://ilyfedorov.com/).
 
 [Interactive demo](https://ilyfedorov.com/ui-components/gallery-carousel/)
 
-Photographs move automatically in an endless ribbon. Hover to magnify a photograph as its neighbors fade into the distance. Drag or scroll to adjust the movement. The demo includes a vertical settings drawer on the right, light/dark themes and Reset. Images have no click action or selected state.
+Photographs move automatically in an endless ribbon. Hover gently magnifies a photograph. Click to expand the full image inline, slide it to the left and freeze the gallery; its neighbors remain in the same ribbon. Drag or scroll to adjust the movement. The demo includes a vertical settings drawer on the right, light/dark themes and Reset. Click the expanded image again, click outside the gallery or press Escape to collapse it and resume scrolling. No modal or fullscreen overlay is used.
 
 ## Run the playground
 
@@ -34,15 +34,15 @@ export function Gallery() {
   return <div style={{ height: 560 }}>
     <GalleryCarousel
       images={images}
-      settings={{ size: 156, hoverScale: 2.05, gap: 10, blur: 5 }}
+      settings={{ size: 156, hoverScale: 1.12, gap: 10, blur: 5 }}
     />
   </div>;
 }
 ```
 
-Give the parent a height. For bottom/top alignment, allow at least `2 × size × hoverScale / aspectRatio − size / aspectRatio + 48` pixels so enlarged images fit. For center alignment, `size × hoverScale / aspectRatio + 48` is sufficient. The demo adjusts its height automatically.
+Give the parent a height. For bottom/top alignment, allow at least `2 × size × max(2.05, hoverScale) / aspectRatio − size / aspectRatio + 48` pixels so enlarged images fit. For center alignment, `size × max(2.05, hoverScale) / aspectRatio + 48` is sufficient. The demo adjusts its height automatically.
 
-`images` accepts `{ src, alt, caption? }` objects. Replace them with your own files. `settings` is a partial `GalleryCarouselSettings` object. Images are figures, not buttons or links; clicking them does not open a viewer or select them.
+`images` accepts `{ src, alt, caption? }` objects. Replace them with your own files. `settings` is a partial `GalleryCarouselSettings` object. Image buttons expand inline within the carousel. The selected image preserves its intrinsic aspect ratio and moves to a 28 px left inset (16 px on narrow screens). The gallery pauses until the image is collapsed. The expanded height is 2.05 times the base height, constrained to fit the available width.
 
 ## Settings
 
@@ -52,7 +52,7 @@ Give the parent a height. For bottom/top alignment, allow at least `2 × size ×
 | `aspectRatio` | `1` | Width divided by height |
 | `gap` | `10` | Space between images, px |
 | `radius` | `5` | Corner radius, px |
-| `hoverScale` | `2.05` | Focused image magnification |
+| `hoverScale` | `1.12` | Focused image magnification |
 | `neighborScale` | `1` | Immediate neighbor magnification |
 | `alignment` | `'bottom'` | `'bottom'`, `'center'` or `'top'` |
 | `blur` | `5` | Maximum distance blur, px |
@@ -78,9 +78,9 @@ The demo additionally controls the sample image count (4–12), theme and Settin
 
 ## Keyboard and motion
 
-- Tab focuses the gallery region; individual images have no click or keyboard activation action.
-- Left/Right arrows browse; Home returns to the beginning.
-- Escape closes the settings drawer.
+- Tab focuses the gallery and visible images. Enter/Space expands or collapses an image inline.
+- Left/Right arrows browse; Home returns to the beginning. Navigation is frozen while an image is expanded.
+- Escape collapses the expanded image or closes the settings drawer.
 - Native pinch zoom and vertical touch scrolling are preserved.
 - `prefers-reduced-motion` disables autoplay and spring magnification.
 - Animation work pauses when the gallery is outside the viewport or the document is hidden.
