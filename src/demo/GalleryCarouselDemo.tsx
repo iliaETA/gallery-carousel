@@ -6,12 +6,23 @@ import './gallery-demo.css';
 
 const repository = 'https://github.com/iliaETA/gallery-carousel';
 const photos = [
-  [1015, 'River through the mountains'], [1016, 'Across the valley'], [1018, 'A quiet landscape'],
-  [1020, 'In the forest'], [1035, 'The waterfall'], [1039, 'Mountain light'],
-  [1040, 'Somewhere in Europe'], [1043, 'Along the coast'], [1050, 'By the water'],
-  [1057, 'A different perspective'], [1067, 'City stories'], [1074, 'Into the wild'],
+  "Collage Shirt by Graphic Content (Side A).png",
+  "MM6 x Salomon.png",
+  "Sport Movement (1).jpeg",
+  "asics-type-shit.jpeg",
+  "blurrr.webp",
+  "capp.jpg",
+  "hoodie.jpeg",
+  "jerseyyy.png",
+  "on.jpg",
+  "puppy (˶>⩊<˶) .jpg",
+  "video presentation of Maserati.gif",
+  "who is this guy?.jpg",
+  "yes.jpeg"
 ] as const;
-export const demoGalleryImages: GalleryImage[] = photos.map(([id, caption]) => ({ src: `/assets/gallery-carousel/${id}.jpg`, alt: caption, caption }));
+export const demoGalleryImages: GalleryImage[] = photos.map((filename, index) => ({
+  src: `/assets/gallery-carousel/${String(index + 1).padStart(2, '0')}.${filename.split('.').pop()}`, alt: filename, caption: filename,
+}));
 
 const d = defaultGallerySettings;
 const galleryDialConfig = {
@@ -20,7 +31,7 @@ const galleryDialConfig = {
     aspectRatio: [d.aspectRatio, .65, 1.6, .05],
     gap: [d.gap, 0, 40, 1],
     cornerRadius: [d.radius, 0, 40, 1],
-    imageCount: [12, 4, 12, 1],
+    imageCount: [photos.length, 4, photos.length, 1],
     showCaptions: d.captions,
   },
   focusAndDepth: {
