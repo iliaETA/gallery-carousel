@@ -13,7 +13,7 @@ export type GalleryCarouselSettings = {
 
 export const defaultGallerySettings: GalleryCarouselSettings = {
   size: 156, aspectRatio: 1, gap: 10, radius: 5,
-  hoverScale: 1.12, neighborScale: 1, alignment: 'bottom',
+  hoverScale: 1.12, neighborScale: 1.05, alignment: 'bottom',
   blur: 5, falloff: 5, minOpacity: .12, edgeFade: 100, tilt: 0, lift: 0,
   stiffness: 230, damping: 25, friction: .9, wheelSpeed: 1, dragSpeed: 1,
   autoplay: true, autoplaySpeed: 26, reverse: false, pauseOnHover: false,
@@ -109,11 +109,9 @@ export function GalleryCarousel({ images, settings, className = '' }: GalleryCar
         for (let i = 0; i < count; i++) {
           const distance = active < 0 ? Infinity : Math.min(wrap(i - active, count), wrap(active - i, count));
           const scale = distance === 0 ? clamp(s.hoverScale, 1, 3) : distance === 1 ? clamp(s.neighborScale, 1, 1.5) : 1;
-          const image = items[i].querySelector('img');
-          const naturalRatio = image?.naturalWidth && image.naturalHeight ? image.naturalWidth / image.naturalHeight : ratio;
           const expandedHeight = size / ratio * Math.max(2.05, s.hoverScale);
-          const target = i === selected ? Math.min(expandedHeight * naturalRatio, width - inset * 2) : size * scale;
-          const targetHeight = i === selected ? target / naturalRatio : target / ratio;
+          const target = i === selected ? Math.min(expandedHeight, width - inset * 2) : size * scale;
+          const targetHeight = i === selected ? target : target / ratio;
           if (media.matches) { values[i] = target; heights[i] = targetHeight; speeds[i] = 0; heightSpeeds[i] = 0; }
           else {
             // Substeps keep the spring stable at low display frame rates.
@@ -175,7 +173,7 @@ export function GalleryCarousel({ images, settings, className = '' }: GalleryCar
             const distance = selected >= 0
               ? Math.max(0, (x - selectedLeft - values[selected]) / (size + gap))
               : Math.abs(x + itemWidth / 2 - anchorX) / (size + gap);
-            const falloff = active < 0 && selected < 0 ? 0 : clamp(distance / Math.max(s.falloff, 1), 0, 1);
+            const falloff = selected < 0 ? 0 : clamp(distance / Math.max(s.falloff, 1), 0, 1);
             const opacity = 1 - falloff * (1 - clamp(s.minOpacity, 0, 1));
             const baseline = (height + size / ratio) / 2;
             const y = s.alignment === 'bottom' ? baseline - itemHeight : s.alignment === 'top' ? (height - size / ratio) / 2 : (height - itemHeight) / 2;
