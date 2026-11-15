@@ -30,8 +30,6 @@ const galleryDialConfig = {
     focusRange: [d.falloff, 1, 8, .25],
     minimumOpacity: [d.minOpacity, 0, 1, .01],
     edgeFade: [d.edgeFade, 0, 240, 5],
-    pointerTilt: [d.tilt, 0, 12, .5],
-    hoverLift: [d.lift, 0, 40, 1],
   },
   motion: {
     springStiffness: [d.stiffness, 80, 500, 5],
@@ -43,10 +41,6 @@ const galleryDialConfig = {
     autoplay: d.autoplay,
     reverseDirection: d.reverse,
     pauseAutoplayOnHover: d.pauseOnHover,
-  },
-  interaction: {
-    dragToBrowse: d.draggable,
-    scrollToBrowse: d.wheel,
   },
   resetAll: { type: 'action', label: 'Reset all' },
 } satisfies DialConfig;
@@ -76,8 +70,6 @@ export function GalleryCarouselDemo() {
     falloff: values.focusAndDepth.focusRange,
     minOpacity: values.focusAndDepth.minimumOpacity,
     edgeFade: values.focusAndDepth.edgeFade,
-    tilt: values.focusAndDepth.pointerTilt,
-    lift: values.focusAndDepth.hoverLift,
     stiffness: values.motion.springStiffness,
     damping: values.motion.springDamping,
     friction: values.motion.momentum,
@@ -87,8 +79,6 @@ export function GalleryCarouselDemo() {
     autoplay: values.motion.autoplay,
     reverse: values.motion.reverseDirection,
     pauseOnHover: values.motion.pauseAutoplayOnHover,
-    draggable: values.interaction.dragToBrowse,
-    wheel: values.interaction.scrollToBrowse,
   };
   const reset = () => {
     dial.resetValues();

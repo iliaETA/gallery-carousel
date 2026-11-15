@@ -10,16 +10,18 @@ html[data-page="gallery-carousel"] body { min-width:0; }
 .gd-toolbar { display:flex; align-items:center; gap:6px; }
 .gallery-demo .gd-button { display:inline-flex; align-items:center; justify-content:center; gap:7px; min-height:34px; padding:8px 12px; border:1px solid transparent; border-radius:12px; background:var(--gd-control); font-family:var(--font-body,'Helvetica Neue',Helvetica,Arial,sans-serif); font-weight:500; font-size:13px; line-height:16px; white-space:nowrap; transition:background 160ms ease; }
 .gd-button.gd-github { background:var(--gd-text); color:var(--gd-bg); padding-inline:14px; }
-.gd-main { display:flex; flex-direction:column; justify-content:center; min-height:calc(100svh - 90px); padding:0 0 90px; transition:margin-right 380ms cubic-bezier(.22,1,.36,1); }
+.gd-main { display:flex; flex-direction:column; justify-content:center; min-height:calc(100svh - 90px); padding:0 0 90px; }
 .gd-gallery-stage { width:100%; height:clamp(430px,65svh,650px); }
-.gd-settings { position:fixed; top:84px; right:16px; max-height:calc(100svh - 100px); width:280px; z-index:6; display:flex; flex-direction:column; overflow:hidden; border:1px solid rgba(0,0,0,.1); border-radius:14px; background:#fafafa; box-shadow:0 4px 20px rgba(0,0,0,.08); transform:translateX(calc(100% + 20px)); opacity:0; visibility:hidden; transition:transform 380ms cubic-bezier(.22,1,.36,1),opacity 180ms ease,visibility 0s 380ms; }
+.gd-settings { position:fixed; top:84px; right:16px; max-height:calc(100svh - 100px); width:280px; z-index:6; display:flex; flex-direction:column; overflow:hidden; border:1px solid rgba(0,0,0,.1); border-radius:14px; background:rgba(250,250,250,.68); backdrop-filter:blur(32px) saturate(1.2); -webkit-backdrop-filter:blur(32px) saturate(1.2); box-shadow:0 4px 20px rgba(0,0,0,.08); transform:translateX(calc(100% + 20px)); opacity:0; visibility:hidden; transition:transform 380ms cubic-bezier(.22,1,.36,1),opacity 180ms ease,visibility 0s 380ms; }
 .gallery-demo[data-settings] .gd-settings { transform:translateX(0); opacity:1; visibility:visible; transition-delay:0s; }
-.gd-dark .gd-settings { background:#212121; border-color:rgba(255,255,255,.1); box-shadow:0 8px 32px rgba(0,0,0,.5); }
+.gd-dark .gd-settings { background:rgba(33,33,33,.68); border-color:rgba(255,255,255,.1); box-shadow:0 8px 32px rgba(0,0,0,.5); }
+/* Let the host glass blur the carousel through the native DialKit surfaces. */
+.gd-settings .dialkit-root[data-theme] { --dial-glass-bg:transparent; }
+.gd-settings .dialkit-panel-inner { backdrop-filter:none; -webkit-backdrop-filter:none; }
 .gd-settings-scroll { min-height:0; max-height:inherit; overflow-y:auto; overscroll-behavior:contain; scrollbar-width:none; }
 .gd-settings-scroll::-webkit-scrollbar { display:none; }
 .gd-settings-close { position:absolute; top:10px; right:8px; z-index:6; display:grid; place-items:center; width:28px; height:28px; padding:0; border:0; background:transparent; color:var(--gd-text); cursor:pointer; }
 .gd-shade { display:none; }
-@media(min-width:900px) { .gallery-demo[data-settings] .gd-main { margin-right:312px; } }
 @media(hover:hover) { .gd-button:hover { filter:brightness(.96); } }
 @media(max-width:899px) { .gallery-demo[data-settings] .gd-shade { display:block; position:fixed; inset:0; z-index:5; padding:0; border:0; background:#0002; backdrop-filter:blur(2px); } .gd-settings { top:16px; width:min(280px,calc(100vw - 32px)); max-height:calc(100svh - 32px); } }
 @media(max-width:600px) {
