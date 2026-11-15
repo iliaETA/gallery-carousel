@@ -46,6 +46,7 @@ export function GalleryCarousel({ images, settings, className = '' }: GalleryCar
     const speeds = Array(count).fill(0) as number[];
     const heights = Array(count).fill(defaultGallerySettings.size) as number[];
     const heightSpeeds = Array(count).fill(0) as number[];
+    const hoverScales = Array(count).fill(1) as number[];
     let width = element.clientWidth;
     let height = element.clientHeight;
     let active = -1;
@@ -113,7 +114,12 @@ export function GalleryCarousel({ images, settings, className = '' }: GalleryCar
         const inset = width < 600 ? 16 : 28;
         for (let i = 0; i < count; i++) {
           const distance = active < 0 ? Infinity : Math.min(wrap(i - active, count), wrap(active - i, count));
-          const scale = distance === 0 ? clamp(s.hoverScale, 1, 3) : distance === 1 ? clamp(s.neighborScale, 1, 1.5) : 1;
+          const hoverTarget = distance === 0 ? clamp(s.hoverScale, 1, 3) : distance === 1 ? clamp(s.neighborScale, 1, 1.5) : 1;
+          // Crossfade the hover influence before the size spring: the previous
+          // photo eases out while the next eases in, even on quick reversals.
+          hoverScales[i] = media.matches ? hoverTarget
+            : hoverScales[i] + (hoverTarget - hoverScales[i]) * -Math.expm1(-dt / .095);
+          const scale = hoverScales[i];
           const expandedHeight = size / ratio * Math.max(2.05, s.hoverScale);
           const target = i === selected ? Math.min(expandedHeight, width - inset * 2) : size * scale;
           const targetHeight = i === selected ? target : target / ratio;
