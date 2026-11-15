@@ -8,7 +8,7 @@ Photographs move automatically in an endless ribbon. Hover gently magnifies a ph
 
 ## Playground features
 
-- Sixteen sample files, including two looping muted videos and an animated GIF; captions preserve the exact original filenames and extensions.
+- Seventeen sample files, including two looping muted videos and an animated GIF; captions preserve the exact original filenames and extensions.
 - Continuous autoplay, with optional dragging and wheel/trackpad browsing.
 - Square image expansion regardless of the source image proportions, with a 14 px caption placed 10 px below the image.
 - Sliders, segmented switches and collapsible Layout, Focus And Depth, and Motion sections.
@@ -85,7 +85,7 @@ Give the parent a height. Allow at least `2 × size × max(2.05, hoverScale) / a
 | `wheel` | `true` | Enable wheel/trackpad browsing |
 | `captions` | `true` | Show the focused image caption |
 
-The demo additionally controls the sample image count (4–16), theme and Settings visibility. Alignment is fixed to the shared bottom baseline. Pointer Tilt, Hover Lift and the Interaction section are not exposed in the playground; the reusable component still accepts `tilt`, `lift`, `draggable` and `wheel` through its API. Drag and wheel browsing remain enabled by default. Reset restores settings, theme, sample count and gallery position.
+The demo additionally controls the sample image count (4–17), theme and Settings visibility. Alignment is fixed to the shared bottom baseline. Pointer Tilt, Hover Lift and the Interaction section are not exposed in the playground; the reusable component still accepts `tilt`, `lift`, `draggable` and `wheel` through its API. Drag and wheel browsing remain enabled by default. Reset restores settings, theme, sample count and gallery position.
 
 ## Keyboard and motion
 

@@ -43,6 +43,10 @@ const photos = [
     "1eecdaede428.jpg"
   ],
   [
+    "hoodie.jpeg",
+    "eb273030e1d5.jpeg"
+  ],
+  [
     "jerseyyy.png",
     "8f8cb0710daf.png"
   ],
