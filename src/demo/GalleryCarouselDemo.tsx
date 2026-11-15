@@ -104,6 +104,7 @@ export function GalleryCarouselDemo() {
 
   return <div className={`gallery-demo ${dark ? 'gd-dark' : ''}`} data-settings={settingsOpen || undefined}>
     <header className="gd-header">
+      <a className="gd-button gd-back" href="https://ilyfedorov.com/ui-components/">Back</a>
       <nav className="gd-toolbar" aria-label="Demo controls">
         <a className="gd-button gd-github" href={repository} target="_blank" rel="noreferrer">GitHub</a>
         <button className="gd-button" onClick={() => setDark(value => !value)}>{dark ? 'Light theme' : 'Dark theme'}</button>

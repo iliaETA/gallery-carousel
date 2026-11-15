@@ -4,7 +4,18 @@ An infinite React image gallery by [Ilya Fedorov](https://ilyfedorov.com/).
 
 [Interactive demo](https://ilyfedorov.com/ui-components/gallery-carousel/)
 
-Photographs move automatically in an endless ribbon. Hover gently magnifies a photograph and its two immediate neighbors, without adding blur or fading. Click to expand a square crop inline, slide it to the left and freeze the gallery; its neighbors remain in the same ribbon. Drag or scroll to adjust the movement. The demo uses the original [DialKit](https://github.com/joshpuckett/dialkit) controls and stylesheet in a vertical drawer on the right, text buttons for light/dark themes, and Reset. Click the expanded image again, click outside the gallery or press Escape to collapse it and resume scrolling. No modal or fullscreen overlay is used.
+Photographs move automatically in an endless ribbon. Hover gently magnifies a photograph and its two immediate neighbors, without adding blur or fading. Click to expand a square crop inline, slide it to the left and freeze the gallery; its neighbors remain in the same ribbon. Click the expanded image again, click outside the gallery or press Escape to collapse it and resume scrolling. No modal or fullscreen overlay is used.
+
+## Playground features
+
+- Continuous autoplay, with optional dragging and wheel/trackpad browsing.
+- Square image expansion regardless of the source image proportions, with a 14 px caption placed 10 px below the image.
+- Original [DialKit](https://github.com/joshpuckett/dialkit) sliders, segmented switches and collapsible Layout, Focus And Depth, and Motion sections.
+- A right settings panel that overlays the gallery without resizing it, with a 32 px backdrop blur and a translucent surface in both themes.
+- A clean Settings header followed by one divider and Layout; the version picker and parameter-copy button are hidden.
+- Text-only gray Back, GitHub, Dark theme / Light theme, Settings and Reset buttons, with Helvetica Neue Medium, 12 px corners and a subtle press scale effect.
+- Back links to the [UI Components collection](https://ilyfedorov.com/ui-components/). Reset restores all playground defaults.
+- Responsive layout, keyboard controls and reduced-motion support.
 
 ## Run the playground
 
@@ -73,7 +84,7 @@ Give the parent a height. Allow at least `2 × size × max(2.05, hoverScale) / a
 | `wheel` | `true` | Enable wheel/trackpad browsing |
 | `captions` | `true` | Show the focused image caption |
 
-The demo additionally controls the sample image count (4–12), theme and Settings visibility. DialKit provides the real sliders, segmented switches, collapsible sections, version menu and parameter export. Alignment is fixed to the shared bottom baseline. Reset restores settings, theme, sample count and gallery position.
+The demo additionally controls the sample image count (4–12), theme and Settings visibility. Alignment is fixed to the shared bottom baseline. Pointer Tilt, Hover Lift and the Interaction section are not exposed in the playground; the reusable component still accepts `tilt`, `lift`, `draggable` and `wheel` through its API. Drag and wheel browsing remain enabled by default. Reset restores settings, theme, sample count and gallery position.
 
 ## Keyboard and motion
 
@@ -90,4 +101,4 @@ An independently written interaction study inspired by [Nick Pyl's gallery](http
 
 Code: [MIT](LICENSE). Temporary photographs are from [Unsplash](https://unsplash.com/) and retain their [Unsplash license](https://unsplash.com/license); see [sources](public/assets/gallery-carousel/sources.json). They are placeholders and are not part of the component API.
 
-The playground uses [DialKit 2.2.1](https://github.com/joshpuckett/dialkit) by Josh Puckett under its [MIT license](https://github.com/joshpuckett/dialkit/blob/main/LICENSE). The panel is mounted with `DialRoot` and wired with `useDialKitController`; controls are not recreated or restyled.
+The playground uses [DialKit 2.2.1](https://github.com/joshpuckett/dialkit) by Josh Puckett under its [MIT license](https://github.com/joshpuckett/dialkit/blob/main/LICENSE). The panel is mounted with `DialRoot` and wired with `useDialKitController`; the native controls are reused, with scoped host styles for the glass surface and simplified header.
