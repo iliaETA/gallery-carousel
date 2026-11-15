@@ -49,6 +49,7 @@ export function GalleryCarousel({ images, settings, className = '' }: GalleryCar
     let width = element.clientWidth;
     let height = element.clientHeight;
     let active = -1;
+    let hoverAnchor = -1;
     let selected = -1;
     let selectedCycle = 1;
     let closing = -1;
@@ -97,10 +98,14 @@ export function GalleryCarousel({ images, settings, className = '' }: GalleryCar
           offset = count * (size + gap) + Math.floor(count / 3) * (size + gap) - width / 2 + size / 2;
           initialized = true;
         }
+        // Keep the last hover anchor while cards settle, including across gaps
+        // and after pointer exit, so changing the ribbon length cannot shift it.
+        if (active >= 0) hoverAnchor = active;
+        const anchor = hoverAnchor;
         // Preserve the current anchor as widths spring toward their new sizes.
-        const oldPrefix = active < 0 ? 0 : values.slice(0, active).reduce((sum, value) => sum + value + gap, 0);
-        const activeCycle = active < 0 ? 1 : Math.round((offset + pointerX - oldPrefix - values[active] / 2) / oldPeriod);
-        const oldAnchor = active < 0 ? 0 : activeCycle * oldPeriod + oldPrefix + values[active] / 2 - offset;
+        const oldPrefix = anchor < 0 ? 0 : values.slice(0, anchor).reduce((sum, value) => sum + value + gap, 0);
+        const activeCycle = anchor < 0 ? 1 : Math.round((offset + pointerX - oldPrefix - values[anchor] / 2) / oldPeriod);
+        const oldAnchor = anchor < 0 ? 0 : activeCycle * oldPeriod + oldPrefix + values[anchor] / 2 - offset;
         const oldSelectedPrefix = selected < 0 ? 0 : values.slice(0, selected).reduce((sum, value) => sum + value + gap, 0);
         const oldSelectedLeft = selected < 0 ? 0 : selectedCycle * oldPeriod + oldSelectedPrefix - offset;
         const oldClosingPrefix = closing < 0 ? 0 : values.slice(0, closing).reduce((sum, value) => sum + value + gap, 0);
@@ -139,9 +144,9 @@ export function GalleryCarousel({ images, settings, className = '' }: GalleryCar
           const prefix = values.slice(0, closing).reduce((sum, value) => sum + value + gap, 0);
           offset = closingCycle * period + prefix - oldClosingLeft;
           if (Math.abs(speeds[closing]) < .1 && Math.abs(heightSpeeds[closing]) < .1) closing = -1;
-        } else if (active >= 0) {
-          const prefix = values.slice(0, active).reduce((sum, value) => sum + value + gap, 0);
-          offset = activeCycle * period + prefix + values[active] / 2 - oldAnchor;
+        } else if (anchor >= 0) {
+          const prefix = values.slice(0, anchor).reduce((sum, value) => sum + value + gap, 0);
+          offset = activeCycle * period + prefix + values[anchor] / 2 - oldAnchor;
         }
         if (!dragging && selected < 0) {
           offset += velocity * dt * 60;
@@ -198,6 +203,20 @@ export function GalleryCarousel({ images, settings, className = '' }: GalleryCar
     };
 
     const itemFrom = (target: EventTarget | null) => target instanceof Element ? target.closest<HTMLButtonElement>('.gc-item') : null;
+    const updateHover = (event: PointerEvent) => {
+      const item = itemFrom(event.target);
+      if (item) { active = Number(item.dataset.index); return; }
+      // A gap belongs to the current hover until the pointer enters its neighbor.
+      // Leaving the actual photo band still releases the hover immediately.
+      const gap = clamp(config().gap, 0, 80);
+      const overGap = active >= 0 && items.some(candidate => {
+        if (Number(candidate.dataset.index) !== active || candidate.style.visibility !== 'visible') return false;
+        const rect = candidate.getBoundingClientRect();
+        return event.clientY >= rect.top && event.clientY <= rect.bottom
+          && event.clientX >= rect.left - gap && event.clientX <= rect.right + gap;
+      });
+      if (!overGap) active = -1;
+    };
     const onMove = (event: PointerEvent) => {
       if (selected >= 0) return;
       pointerX = event.clientX - element.getBoundingClientRect().left;
@@ -213,15 +232,13 @@ export function GalleryCarousel({ images, settings, className = '' }: GalleryCar
           if (!element.hasPointerCapture(event.pointerId)) element.setPointerCapture(event.pointerId);
         }
       } else if (event.pointerType === 'mouse') {
-        const item = itemFrom(event.target);
-        active = item ? Number(item.dataset.index) : -1;
+        updateHover(event);
       }
     };
     const onOver = (event: PointerEvent) => {
       pointerInside = true;
       if (selected < 0 && event.pointerType === 'mouse' && !dragging) {
-        const item = itemFrom(event.target);
-        active = item ? Number(item.dataset.index) : -1;
+        updateHover(event);
         pointerX = event.clientX - element.getBoundingClientRect().left;
       }
     };
