@@ -8,7 +8,7 @@ export type GalleryCarouselSettings = {
   blur: number; falloff: number; minOpacity: number; edgeFade: number; tilt: number; lift: number;
   stiffness: number; damping: number; friction: number; wheelSpeed: number; dragSpeed: number;
   autoplay: boolean; autoplaySpeed: number; reverse: boolean; pauseOnHover: boolean;
-  draggable: boolean; wheel: boolean; captions: boolean; expandOnClick: boolean;
+  draggable: boolean; wheel: boolean; captions: boolean;
 };
 
 export const defaultGallerySettings: GalleryCarouselSettings = {
@@ -16,14 +16,13 @@ export const defaultGallerySettings: GalleryCarouselSettings = {
   hoverScale: 2.05, neighborScale: 1, alignment: 'bottom',
   blur: 5, falloff: 5, minOpacity: .12, edgeFade: 100, tilt: 0, lift: 0,
   stiffness: 230, damping: 25, friction: .9, wheelSpeed: 1, dragSpeed: 1,
-  autoplay: false, autoplaySpeed: 26, reverse: false, pauseOnHover: true,
-  draggable: true, wheel: true, captions: true, expandOnClick: true,
+  autoplay: true, autoplaySpeed: 26, reverse: false, pauseOnHover: false,
+  draggable: true, wheel: true, captions: true,
 };
 
 export type GalleryCarouselProps = {
   images: GalleryImage[];
   settings?: Partial<GalleryCarouselSettings>;
-  onImageSelect?: (image: GalleryImage, index: number) => void;
   className?: string;
 };
 
@@ -31,17 +30,17 @@ const clamp = (value: number, min: number, max: number) => Math.max(min, Math.mi
 const wrap = (value: number, period: number) => ((value % period) + period) % period;
 
 /** Infinite, inertial gallery. No animation library or remote runtime dependencies. */
-export function GalleryCarousel({ images, settings, onImageSelect, className = '' }: GalleryCarouselProps) {
+export function GalleryCarousel({ images, settings, className = '' }: GalleryCarouselProps) {
   const root = useRef<HTMLDivElement>(null);
-  const latest = useRef({ images, settings, onImageSelect });
-  latest.current = { images, settings, onImageSelect };
+  const latest = useRef({ settings });
+  latest.current = { settings };
   const count = images.length;
   const [copies, setCopies] = useState(3);
 
   useEffect(() => {
     const element = root.current;
     if (!element || !count) return;
-    const buttons = Array.from(element.querySelectorAll<HTMLButtonElement>('.gc-item'));
+    const items = Array.from(element.querySelectorAll<HTMLElement>('.gc-item'));
     const media = matchMedia('(prefers-reduced-motion: reduce)');
     const values = Array(count).fill(defaultGallerySettings.size) as number[];
     const speeds = Array(count).fill(0) as number[];
@@ -57,7 +56,6 @@ export function GalleryCarousel({ images, settings, onImageSelect, className = '
     let dragPointer = -1;
     let lastX = 0;
     let dragged = 0;
-    let suppressClick = false;
     let frame = 0;
     let previous = 0;
     let disposed = false;
@@ -129,7 +127,7 @@ export function GalleryCarousel({ images, settings, onImageSelect, className = '
         for (let copy = 0; copy < copies; copy++) {
           prefix = 0;
           for (let i = 0; i < count; i++) {
-            const button = buttons[copy * count + i];
+            const item = items[copy * count + i];
             const itemWidth = values[i];
             const itemHeight = itemWidth / ratio;
             const x = copy * period + prefix - offset;
@@ -140,16 +138,15 @@ export function GalleryCarousel({ images, settings, onImageSelect, className = '
             const baseline = (height + size / ratio) / 2;
             const y = s.alignment === 'bottom' ? baseline - itemHeight : s.alignment === 'top' ? (height - size / ratio) / 2 : (height - itemHeight) / 2;
             const inView = x + itemWidth > -60 && x < width + 60;
-            button.style.width = `${itemWidth}px`;
-            button.style.height = `${itemHeight}px`;
-            button.style.transform = `translate3d(${x}px,${y - (isActive ? s.lift : 0)}px,0) rotate(${isActive ? clamp((pointerX - anchorX) / size, -1, 1) * s.tilt : 0}deg)`;
-            button.style.opacity = `${opacity}`;
-            button.style.filter = `blur(${falloff * clamp(s.blur, 0, 20)}px)`;
-            button.style.visibility = inView ? 'visible' : 'hidden';
-            button.style.zIndex = isActive ? '2' : '1';
-            button.dataset.active = String(isActive && inView);
-            button.tabIndex = inView ? 0 : -1;
-            button.setAttribute('aria-hidden', String(!inView));
+            item.style.width = `${itemWidth}px`;
+            item.style.height = `${itemHeight}px`;
+            item.style.transform = `translate3d(${x}px,${y - (isActive ? s.lift : 0)}px,0) rotate(${isActive ? clamp((pointerX - anchorX) / size, -1, 1) * s.tilt : 0}deg)`;
+            item.style.opacity = `${opacity}`;
+            item.style.filter = `blur(${falloff * clamp(s.blur, 0, 20)}px)`;
+            item.style.visibility = inView ? 'visible' : 'hidden';
+            item.style.zIndex = isActive ? '2' : '1';
+            item.dataset.hovered = String(isActive && inView);
+            item.setAttribute('aria-hidden', String(!inView));
             prefix += itemWidth + gap;
           }
         }
@@ -157,7 +154,7 @@ export function GalleryCarousel({ images, settings, onImageSelect, className = '
       frame = requestAnimationFrame(animate);
     };
 
-    const itemFrom = (target: EventTarget | null) => target instanceof Element ? target.closest<HTMLButtonElement>('.gc-item') : null;
+    const itemFrom = (target: EventTarget | null) => target instanceof Element ? target.closest<HTMLElement>('.gc-item') : null;
     const onMove = (event: PointerEvent) => {
       pointerX = event.clientX - element.getBoundingClientRect().left;
       if (dragging && event.pointerId === dragPointer) {
@@ -168,7 +165,7 @@ export function GalleryCarousel({ images, settings, onImageSelect, className = '
         lastX = event.clientX;
         lastMovement = performance.now();
         if (dragged > 5) {
-          active = -1; suppressClick = true;
+          active = -1;
           if (!element.hasPointerCapture(event.pointerId)) element.setPointerCapture(event.pointerId);
         }
       } else if (event.pointerType === 'mouse') {
@@ -187,7 +184,7 @@ export function GalleryCarousel({ images, settings, onImageSelect, className = '
     const onLeave = () => { if (!dragging) { active = -1; pointerInside = false; } };
     const onDown = (event: PointerEvent) => {
       if (!config().draggable || event.button !== 0) return;
-      dragging = true; dragPointer = event.pointerId; lastX = event.clientX; dragged = 0; suppressClick = false; velocity = 0;
+      dragging = true; dragPointer = event.pointerId; lastX = event.clientX; dragged = 0; velocity = 0;
       element.dataset.dragging = 'true';
     };
     const onUp = (event: PointerEvent) => {
@@ -208,27 +205,12 @@ export function GalleryCarousel({ images, settings, onImageSelect, className = '
       velocity = clamp(velocity, -100, 100);
       active = -1;
     };
-    const onFocus = (event: FocusEvent) => {
-      const item = itemFrom(event.target);
-      if (!item || !item.matches(':focus-visible')) return;
-      active = Number(item.dataset.index);
-      pointerX = item.getBoundingClientRect().left + item.getBoundingClientRect().width / 2 - element.getBoundingClientRect().left;
-    };
-    const onBlur = (event: FocusEvent) => { if (!element.contains(event.relatedTarget as Node)) active = -1; };
     const onKey = (event: KeyboardEvent) => {
       if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight' && event.key !== 'Home') return;
       event.preventDefault();
       active = -1;
       if (event.key === 'Home') { initialized = false; velocity = 0; }
       else velocity = (config().size + config().gap) * .14 * (event.key === 'ArrowLeft' ? -1 : 1);
-    };
-    const onClick = (event: MouseEvent) => {
-      if (suppressClick) { suppressClick = false; event.preventDefault(); return; }
-      const item = itemFrom(event.target);
-      if (item && config().expandOnClick) {
-        const index = Number(item.dataset.index);
-        latest.current.onImageSelect?.(latest.current.images[index], index);
-      }
     };
     const visibility = () => { visible = !document.hidden; previous = performance.now(); };
     const observer = new IntersectionObserver(entries => { onScreen = entries[0].isIntersecting; });
@@ -241,10 +223,7 @@ export function GalleryCarousel({ images, settings, onImageSelect, className = '
     element.addEventListener('pointercancel', cancelDrag);
     element.addEventListener('lostpointercapture', cancelDrag);
     element.addEventListener('wheel', onWheel, { passive: false });
-    element.addEventListener('focusin', onFocus);
-    element.addEventListener('focusout', onBlur);
     element.addEventListener('keydown', onKey);
-    element.addEventListener('click', onClick);
     document.addEventListener('visibilitychange', visibility);
     frame = requestAnimationFrame(animate);
     return () => {
@@ -253,19 +232,18 @@ export function GalleryCarousel({ images, settings, onImageSelect, className = '
       element.removeEventListener('pointerleave', onLeave); element.removeEventListener('pointerdown', onDown);
       element.removeEventListener('pointerup', onUp); element.removeEventListener('pointercancel', cancelDrag);
       element.removeEventListener('lostpointercapture', cancelDrag); element.removeEventListener('wheel', onWheel);
-      element.removeEventListener('focusin', onFocus); element.removeEventListener('focusout', onBlur);
-      element.removeEventListener('keydown', onKey); element.removeEventListener('click', onClick);
+      element.removeEventListener('keydown', onKey);
       document.removeEventListener('visibilitychange', visibility);
     };
   }, [count, copies]);
 
   const s = { ...defaultGallerySettings, ...settings };
-  return <div ref={root} className={`gallery-carousel ${className}`} role="region" aria-roledescription="carousel" aria-label="Image gallery. Drag, scroll or use the arrow keys to browse." tabIndex={0}
+  return <div ref={root} className={`gallery-carousel ${className}`} role="region" aria-roledescription="carousel" aria-label="Automatically scrolling image gallery. Use the arrow keys to browse." tabIndex={0}
     style={{ '--gc-radius': `${s.radius}px`, '--gc-edge': `${s.edgeFade}px` } as CSSProperties}>
     {count ? Array.from({ length: copies }, (_, copy) => images.map((image, index) =>
-      <button className="gc-item" type="button" key={`${copy}-${index}`} data-index={index} tabIndex={-1} aria-label={`${s.expandOnClick ? 'Open' : 'View'} ${image.caption || image.alt}`}>
+      <figure className="gc-item" key={`${copy}-${index}`} data-index={index}>
         <img className="gc-photo" src={image.src} alt={image.alt} draggable={false} decoding="async" />
         {s.captions && <span className="gc-caption" aria-hidden="true">{image.caption || image.alt}</span>}
-      </button>)) : <p className="gc-empty">Add images to start your gallery.</p>}
+      </figure>)) : <p className="gc-empty">Add images to start your gallery.</p>}
   </div>;
 }

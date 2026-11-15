@@ -4,7 +4,7 @@ An infinite React image gallery by [Ilya Fedorov](https://ilyfedorov.com/).
 
 [Interactive demo](https://ilyfedorov.com/ui-components/gallery-carousel/)
 
-Hover to magnify a photograph as its neighbors fade into the distance. Drag or scroll to explore an endless ribbon with spring motion and momentum. The demo includes a vertical settings drawer on the right, light/dark themes, image expansion and Reset.
+Photographs move automatically in an endless ribbon. Hover to magnify a photograph as its neighbors fade into the distance. Drag or scroll to adjust the movement. The demo includes a vertical settings drawer on the right, light/dark themes and Reset. Images have no click action or selected state.
 
 ## Run the playground
 
@@ -35,7 +35,6 @@ export function Gallery() {
     <GalleryCarousel
       images={images}
       settings={{ size: 156, hoverScale: 2.05, gap: 10, blur: 5 }}
-      onImageSelect={(image, index) => console.log(image, index)}
     />
   </div>;
 }
@@ -43,7 +42,7 @@ export function Gallery() {
 
 Give the parent a height. For bottom/top alignment, allow at least `2 × size × hoverScale / aspectRatio − size / aspectRatio + 48` pixels so enlarged images fit. For center alignment, `size × hoverScale / aspectRatio + 48` is sufficient. The demo adjusts its height automatically.
 
-`images` accepts `{ src, alt, caption? }` objects. Replace them with your own files. `settings` is a partial `GalleryCarouselSettings` object; `onImageSelect` is an optional callback. Fullscreen viewing is implemented in the demo so consuming applications can choose their own behavior.
+`images` accepts `{ src, alt, caption? }` objects. Replace them with your own files. `settings` is a partial `GalleryCarouselSettings` object. Images are figures, not buttons or links; clicking them does not open a viewer or select them.
 
 ## Settings
 
@@ -67,22 +66,21 @@ Give the parent a height. For bottom/top alignment, allow at least `2 × size ×
 | `friction` | `0.9` | Momentum retained per 60 Hz frame |
 | `wheelSpeed` | `1` | Wheel/trackpad sensitivity |
 | `dragSpeed` | `1` | Drag sensitivity |
-| `autoplay` | `false` | Continuous automatic scrolling |
+| `autoplay` | `true` | Continuous automatic scrolling |
 | `autoplaySpeed` | `26` | Autoplay speed, px/s |
 | `reverse` | `false` | Reverse autoplay direction |
-| `pauseOnHover` | `true` | Pause autoplay while pointer is inside |
+| `pauseOnHover` | `false` | Pause autoplay while pointer is inside |
 | `draggable` | `true` | Enable pointer/touch dragging |
 | `wheel` | `true` | Enable wheel/trackpad browsing |
 | `captions` | `true` | Show the focused image caption |
-| `expandOnClick` | `true` | Enable image-selection callback |
 
 The demo additionally controls the sample image count (4–12), theme and Settings visibility. Reset restores settings, theme, sample count and gallery position.
 
 ## Keyboard and motion
 
-- Tab focuses visible images; Enter activates the image-selection callback.
+- Tab focuses the gallery region; individual images have no click or keyboard activation action.
 - Left/Right arrows browse; Home returns to the beginning.
-- Escape closes the demo image viewer or settings drawer.
+- Escape closes the settings drawer.
 - Native pinch zoom and vertical touch scrolling are preserved.
 - `prefers-reduced-motion` disables autoplay and spring magnification.
 - Animation work pauses when the gallery is outside the viewport or the document is hidden.
