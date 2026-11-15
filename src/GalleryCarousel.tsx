@@ -4,7 +4,7 @@ import './gallery-carousel.css';
 export type GalleryImage = { src: string; alt: string; caption?: string };
 export type GalleryCarouselSettings = {
   size: number; aspectRatio: number; gap: number; radius: number;
-  hoverScale: number; neighborScale: number; alignment: 'top' | 'center' | 'bottom';
+  hoverScale: number; neighborScale: number;
   blur: number; falloff: number; minOpacity: number; edgeFade: number; tilt: number; lift: number;
   stiffness: number; damping: number; friction: number; wheelSpeed: number; dragSpeed: number;
   autoplay: boolean; autoplaySpeed: number; reverse: boolean; pauseOnHover: boolean;
@@ -13,7 +13,7 @@ export type GalleryCarouselSettings = {
 
 export const defaultGallerySettings: GalleryCarouselSettings = {
   size: 156, aspectRatio: 1, gap: 10, radius: 5,
-  hoverScale: 1.12, neighborScale: 1.05, alignment: 'bottom',
+  hoverScale: 1.12, neighborScale: 1.05,
   blur: 5, falloff: 5, minOpacity: .12, edgeFade: 100, tilt: 0, lift: 0,
   stiffness: 230, damping: 25, friction: .9, wheelSpeed: 1, dragSpeed: 1,
   autoplay: true, autoplaySpeed: 26, reverse: false, pauseOnHover: false,
@@ -176,7 +176,7 @@ export function GalleryCarousel({ images, settings, className = '' }: GalleryCar
             const falloff = selected < 0 ? 0 : clamp(distance / Math.max(s.falloff, 1), 0, 1);
             const opacity = 1 - falloff * (1 - clamp(s.minOpacity, 0, 1));
             const baseline = (height + size / ratio) / 2;
-            const y = s.alignment === 'bottom' ? baseline - itemHeight : s.alignment === 'top' ? (height - size / ratio) / 2 : (height - itemHeight) / 2;
+            const y = baseline - itemHeight;
             const inView = x + itemWidth > -60 && x < width + 60;
             item.style.width = `${itemWidth}px`;
             item.style.height = `${itemHeight}px`;
